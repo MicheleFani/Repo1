@@ -1,0 +1,67 @@
+A. Ali, W. Huiqiang, L. Hongwu, and X. Chen, "A survey of MAC protocols design
+strategies and techniques in wireless ad hoc networks," Journal of Communications,
+vol. 9, no. 1, pp. 30-38, 2014.
+The advantage of BATMAN lies in the fact that routing overhead is minimized by maintaining only the next hop neighbor entry to forward messages to instead of maintaining the full route to the destination. The Bundle Layer along with BATMAN ensures reliable transmission of messages between source and destination.
+Seither, D., König, A., Hollick, M.Routing performance of wireless mesh networks: a practical evaluation of batman advancedProceedings of the 36th Annual IEEE Conference on Local Computer Networks (LCN ’11)October 2011Bonn, GermanyIEEE89790410.1109/lcn.2011.61155692-s2.0-84856147576
+
+This caused OLSR to have significant performance shortcomings when the number of nodes in the
+network grew too large (approx. 300+ nodes) and so B.A.T.M.A.N was created specifically for large
+ad-hoc mesh networks.
+In BATMAN, there is no topology message dissemination. Every node executes the following
+operations.
+1. Sending of periodic advertisement messages, called OriGinator Message (OGM). The size of
+these messages is just 52 bytes, containing: the IP address of the originator, the IP address of
+the forwarding node, a Time To Live (TTL) value and an increasing Sequence Number (SQ).
+2. Checking of the best one-hop neighbor for every (known) destination in the network by means of
+a ranking procedure.
+3. Re-broadcasting of OGMs received via best one-hop neighbor.
+The BATMAN uses a timer for sending OGMs and SQ (OGM) for checking the bi-directionality of links.
+If the SQ of an OGM received from a particular node falls within a certain range then the
+corresponding link is considered to be bi-directional.
+For example, suppose that in a time interval T, node A sends Tr messages, where r is the rate of OGM
+messages. The neighbors of A will re-broadcast the OGMs of A and also other node’s OGMs. When A
+receives some OGMs from a neighbor node, say B, it checks if the last received OGM from B has an
+SQ less than or equal to Tr. If it does, then B is considered to be bi-directional, otherwise it is
+considered to be unidirectional. Bi-directional links are used for the ranking procedure. The quantity Tr
+is called the bi-directional sequence number range. The ranking procedure is a substitute of the link
+quality extension of OLSR.
+uMesh Wireless Ad-Hoc Mesh Network
+White Paper
+Model RWP-2000
+[Type here] www.telegrid.com 2
+In a few words, every node ranks its neighboring nodes by means of a simple counting of total
+received OGMs from them. The ranking procedure is performed on OriGinator (OG) basis, i.e. for
+every originator. Initially, for every OG, every node stores a variable called Neighbor Ranking
+Sequence Frame (NBRF), which is upper bounded by a particular value called the ranking sequence
+number range. We suppose that there is a rank table in every node which stores all the information
+contained in the OGMs. Whenever a new OGM is being received via a bi-directional link, the receiving
+node executes the following steps.
+1. If the sequence number of the OGM is less than the corresponding NBRF, then drop the packet.
+2. Otherwise, update the NBRF = SQ (OGM) in the ranking table.
+3. If SQ (OGM) is received for the first time, store OGM in a new row of the rank table.
+4. Otherwise, increment by one the OGM count or make ranking for this OGM.
+Finally, the ranking procedures select the best one-hop neighbor (the neighbor which has the highest
+rank in the ranking table). Let us note that the same OGM packet is used for: link sensing, neighbor
+discovery, bi-directional link validation and flooding mechanism. While this feature eliminates routing
+loops because no global topology information are flooded, the self-interference due to data traffic can
+cause oscillations in the throughput as we will see in our experiments.
+In BATMAN, every node re-broadcasts received OGMs only once, and only those OGMs, which have
+been received via the best-ranked neighbor. This is a kind of selective flooding, which practically
+reduces the overhead of the flooding. Another analogy can be found in gossip protocols. In gossip
+protocol, every node decides to re-broadcast received data with some probability p. This is equivalent
+to eliminating some links in the network and then supposing that every node re-broadcast with
+probability 1. In gossip protocol, there is a threshold for p and the density of nodes after which the
+success ratio is almost surely 1. In BATMAN, the probability p is changed according to the ranking
+procedure. It is the probability that an OGM is reached via the best rank neighbor. The expression of
+this probability is left for further analysis. Let us note that the selective flooding eliminates possible
+misbehavior of the ranking procedure. In fact, cumulative count of the OGM could be greater than the
+total number of OGM received via the current best neighbor.
+The original B.A.T.M.A.N routing protocol implementations operate on ISO/OSI Layer 3 (Network
+Layer) and routing information is exchanged via UDP packets and routing decisions are accomplished
+by manipulating the kernel routing table.
+
+
+
+
+
+
